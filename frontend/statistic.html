@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Статистика</title>
+</head>
+<body>
+    <div>
+        <a href="appGet.html">Получить заявки</a>
+        <a href="appAdd.html">Добавить новую заявку</a>
+        <a href="statistic.html">Статистика</a>
+        <a href="appUpdate.html">Редактировать заявку</a>
+    </div>
+    <table>
+        <tr>
+            <th>Статистика</th>
+        </tr>
+    </table>
+        <script>
+            let table = document.querySelector("table");
+            GetStatisticСomplCount();
+            GetStatisticAvrg();
+            GetStatisticDescription();
+
+            async function GetStatisticСomplCount(){
+                let response = await fetch("http://localhost:5105/stat/complCount", {method: "GET"})
+                let stat = await response.json();
+                let tr = document.createElement("tr");
+                tr.innerHTML = `<tr>
+                <td>Завершенные заказы:<td>    
+                <td>Количество завершенных заказов: </td><td>${stat}</td>
+                </tr>`;
+                
+                table.append(tr)               
+            };
+
+            async function GetStatisticAvrg(){
+                let response = await fetch("http://localhost:5105/stat/avrg", {method: "GET"})
+                let stat = await response.json();
+                let tr = document.createElement("tr");
+                tr.innerHTML = `<tr>
+                <td>Среднее количество:<td>    
+                <td>Количество: </td><td>${stat}</td>
+                </tr>`;
+                
+                table.append(tr)
+            };
+
+            async function GetStatisticDescription() {
+                let response = await fetch("http://localhost:5105/stat/description", {method: "GET"})
+                let stat = await response.json();
+                let tr = document.createElement("tr");
+                tr.innerHTML = `<td>Статистика по типам неисправностей: </td>`;
+                Object.entries(stat).forEach(([key,value]) => {
+                    let tr = document.createElement("tr");
+                    tr.innerHTML = `<td>${key}: </td><td>${value}</td>`;
+                    table.append(tr);
+                });
+            }   
+        
+        </script>
+</body>
+</html>
